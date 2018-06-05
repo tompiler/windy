@@ -94,7 +94,7 @@ a {
 #legend {
 	position: absolute;
 	left: 0px;
-	top: 390px;
+	top: 200px;
 	z-index: 20;
 }
 
@@ -162,34 +162,15 @@ a {
     <span id="title">wind map <span class="warning">temporarily offline, data not up to date. Back soon!</span></span>
   </div>
 
-  <hr id="header-line" />
-
-  <div  id="map-data">
-    <span id="update-time"></span>
-    <br><br>
-    <span id="average-speed"></span><br><br>
-  </div>
   <div id="legend">
-    <canvas id="legend1" width=80 height=20></canvas> 1 mph<br><br>
-    <canvas id="legend2" width=80 height=20></canvas> 3 mph<br><br>
-    <canvas id="legend3" width=80 height=20></canvas> 5 mph<br><br>
-    <canvas id="legend4" width=80 height=20></canvas> 10 mph<br><br>
-    <canvas id="legend5" width=80 height=20></canvas> 15 mph<br><br>
-    <canvas id="legend6" width=80 height=20></canvas> 30 mph<br><br>
+    <canvas id="legend1" width=400 height=300></canvas> 15 mph<br><br>
     <input style="visibility:hidden" id="animating" type="checkbox" checked></input><br><br> 
     <input id="unzoom" style="visiblity:hidden" onclick="doUnzoom()" type="button" value="Unzoom"></input>
   </div>
 
-  <canvas id="display" width=900 height=600 unselectable="on" class="unselectable">    If the map is missing, we recommend the latest
-	<a href="http://www.google.com/chrome">Chrome</a> browser.
-</canvas>
-  <canvas id="city-display" width=900 height=600 unselectable="on" class="unselectable"></canvas>
-  <canvas id="image-canvas" width=900 height=600 unselectable="on" class="unselectable"></canvas>
-  
+
   <div id="callout"></div>
-  <div id="mask-holder">
-    <img alt="mask" id="mask" src="us-mask-white.png" unselectable="on" class="unselectable">
-  </div>
+
 </div>
 
 

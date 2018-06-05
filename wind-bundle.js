@@ -3,76 +3,7 @@
  * Fernanda Viegas & Martin Wattenberg
  */
 
- /**
- * Simple representation of 2D vector.
- */
 
-var Vector = function(x, y) {
-	this.x = x;
-	this.y = y;
-}
-
-
-Vector.polar = function(r, theta) {
-	return new Vector(r * Math.cos(theta), r * Math.sin(theta));
-};
-
-
-Vector.prototype.length = function() {
-	return Math.sqrt(this.x * this.x + this.y * this.y);
-};
-
-
-Vector.prototype.copy = function(){
-  return new Vector(this.x, this.y);
-};
-
-
-Vector.prototype.setLength = function(length) {
-	var current = this.length();
-	if (current) {
-		var scale = length / current;
-		this.x *= scale;
-		this.y *= scale;
-	}
-	return this;
-};
-
-
-Vector.prototype.setAngle = function(theta) {
-  var r = length();
-  this.x = r * Math.cos(theta);
-  this.y = r * Math.sin(theta);
-  return this;
-};
-
-
-Vector.prototype.getAngle = function() {
-  return Math.atan2(this.y, this.x);
-};
-
-
-Vector.prototype.d = function(v) {
-		var dx = v.x - this.x;
-		var dy = v.y - this.y;
-		return Math.sqrt(dx * dx + dy * dy);
-};/**
- * Identity projection.
- */
-var IDProjection = {
-	project: function(x, y, opt_v) {
-		var v = opt_v || new Vector();
-		v.x = x;
-		v.y = y;
-	  return v;
-  },
-	invert: function(x, y, opt_v) {
-		var v = opt_v || new Vector();
-		v.x = x;
-		v.y = y;
-	  return v;
-  }
-};
 
 /**
  * Albers equal-area projection.
@@ -2950,7 +2881,7 @@ var cities = [
 var field = VectorField.read(windData, true);
 
 var mapAnimator;
-var legendSpeeds = [1, 3, 5, 10, 15, 30];
+var legendSpeeds = [15];
 
 var MapMask = function(image, width, height) {
 	this.image = image;
@@ -2999,51 +2930,6 @@ function init() {
 	day = day.replace('September', 'Sept.'); // No room for full "September".
 	day = day.replace('November', 'Nov.'); // No room for full "November".
 	day = day.replace('December', 'Dec.'); // No room for full "December".
-	document.getElementById('update-time').innerHTML =
-	   '<span id="day">' + day +'</span><br>' + time + ' EST' +
-		 '<br><span id="time-explanation">(time of forecast download)</span>';
-
-	var avg = field.averageLength / 1.15; // knots --> miles per hour
-  var max = field.maxLength / 1.15;
-		document.getElementById('average-speed').innerHTML =
-	    '<br>top speed: <b>' + format(max) + ' mph</b><br>' +
-			'average: <b>' + format(avg) + ' mph</b>';
-
-	var canvas = document.getElementById('display');
-	var imageCanvas = document.getElementById('image-canvas');
-	var mapProjection = new ScaledAlbers(
-	    1111, -75, canvas.height - 100, -126.5, 23.5);
-	var isMacFF = navigator.platform.indexOf('Mac') != -1 &&
-	              navigator.userAgent.indexOf('Firefox') != -1;
-	var isWinFF = navigator.platform.indexOf('Win') != -1 &&
-	              navigator.userAgent.indexOf('Firefox') != -1;
-	var isWinIE = navigator.platform.indexOf('Win') != -1 &&
-	              navigator.userAgent.indexOf('MSIE') != -1;
-	var numParticles = isMacFF || isWinIE ? 3500 : 5000; // slowwwww browsers
-	var display = new MotionDisplay(canvas, imageCanvas, field,
-	                                numParticles, mapProjection);
-
-  // IE & FF Windows do weird stuff with very low alpha.
-  if (isWinFF || isWinIE) {
-		display.setAlpha(.05);
-	}
-
-  var navDiv = document.getElementById("city-display");
-	var unzoom = document.getElementById('unzoom');
-	mapAnimator = new Animator(navDiv, isAnimating, unzoom);
-	mapAnimator.add(display);
-	
-	var mask = new MapMask(document.getElementById('mask'), 900, 600);
-	mapAnimator.add(mask);
-	
-	var callout = document.getElementById('callout');
-	var hovercard = new MotionDetails(navDiv, callout, field,
-	                                  mapProjection, mapAnimator);
-
-	var cityCanvas = document.getElementById('city-display');
-	cityDisplay = new CityDisplay(cities, cityCanvas, mapProjection);
-	mapAnimator.add(cityDisplay);
-	cityDisplay.move();
 
   var legendAnimator = new Animator(null, isAnimating);
 
@@ -3055,11 +2941,15 @@ function init() {
 		var c = document.getElementById('legend' + i);
 		var legendField = VectorField.constant(
 		    legendSpeeds[i - 1] * speedScaleFactor, 0, 0, 0, c.width, c.height);
+		console.log(legendField);
 		var legend = new MotionDisplay(c, null, legendField, 30);
 		// normalize so colors correspond to wind map's maximum length!
 		legend.maxLength = field.maxLength * speedScaleFactor;
 		legendAnimator.add(legend);
 	}
-	mapAnimator.start(40);
+	//mapAnimator.start(40);
 	legendAnimator.start(40);
 }
+
+
+
